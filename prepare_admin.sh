@@ -7,7 +7,7 @@
 #IPV6 disable;
 
 DIR='/admin'
-PUB_KEY=''
+echo -e "Enter PUB_KEY(In RSA format):\n"; read PUB_KEY
 
 if [ -z "$PUB_KEY" ]; then
 	echo -e "The public key variable in the script body is not defined!"
