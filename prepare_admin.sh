@@ -10,8 +10,8 @@ DIR='/admin'
 PUB_KEY=''
 
 if [ -z "$PUB_KEY" ]; then
-echo -e "The public key variable in the script body is not defined!"
-exit 1
+	echo -e "The public key variable in the script body is not defined!"
+	exit 1
 fi
 
 #Update & upgrade & base utils install:
@@ -24,6 +24,12 @@ if [ ! -d "$DIR" ]; then
 	mkdir $DIR
 fi
 echo "cd $DIR" >> ~/.bashrc
+
+# Install awscli & SDK google
+git clone https://github.com/aradyuk/Project-wor.git $DIR
+cd /$DIR
+ ./install-scripts/awscli-install.sh
+ ./install-scripts/SDK-install.sh
 
 #Permit root login by the key:
 mkdir -p /root/.ssh
