@@ -26,7 +26,7 @@ fi
 echo "cd $DIR" >> ~/.bashrc
 
 # Install awscli & SDK google
-git clone https://github.com/aradyuk/Project-wor.git $DIR
+git clone https://github.com/fdg11/Project-work.git $DIR
 cd /$DIR
  ./install-scripts/awscli-install.sh
  ./install-scripts/SDK-install.sh
