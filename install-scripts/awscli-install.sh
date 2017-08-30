@@ -10,6 +10,7 @@ pip install awscli --upgrade --user
 
 # Add an export path to profile script.
 echo "export PATH=~/.local/bin:$PATH" >> ~/.profile
+echo "complete -C '/root/.local/bin/aws_completer' aws" >> ~/.profile
 
 # Load the profile
 source ~/.profile
