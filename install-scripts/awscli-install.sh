@@ -15,5 +15,6 @@ echo "export PATH=~/.local/bin:$PATH" >> ~/.profile
 source ~/.profile
 
 # Version
-echo -e "\n$(aws --version)"
+echo -e ""
+echo -e "$(aws --version)"
 sleep 8
