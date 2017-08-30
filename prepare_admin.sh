@@ -17,7 +17,7 @@ fi
 
 # Update & upgrade & base utils install:
 apt-get update && apt upgrade -y 
-apt-get install wget curl git htop atop build-essential tree python-pip vim -y
+apt-get install wget curl git htop atop build-essential tree python-pip groff vim -y
 apt-get autoremove -y && apt-get autoclean && apt-get clean
  
 # Default dir:
