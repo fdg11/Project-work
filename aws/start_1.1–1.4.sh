@@ -55,6 +55,6 @@ sleep 5
 aws ec2 attach-volume --volume-id $VOLID --instance-id $INSTID --device /dev/sdf &> /dev/null
 
 # Information output
-ELIP=$(aws ec2 describe-addresses --query 'Addresses[*].[PublicIp]')
-echo -e "To connect, use the following command: ssh -i /admin/aws/key/$KEYNAME.pem ubuntu@$ELIP"
+ELIP=$(aws ec2 describe-addresses --filters Name=association-id,Values=$EIPASSOCID --query 'Addresses[*].[PublicIp]')
+echo -e "\nTo connect, use the following command: ssh -i /admin/aws/key/$KEYNAME.pem ubuntu@$ELIP"
 
