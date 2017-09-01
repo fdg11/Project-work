@@ -50,7 +50,7 @@ EIPASSOCID=$(aws ec2 associate-address --instance-id $INSTID --allocation-id $AL
 AZONE=$(aws ec2 describe-instances --instance-ids $INSTID --query 'Reservations[*].Instances[*].[Placement.AvailabilityZone]')
 
 # Create and attach volume an instance
-VOLID=$(aws ec2 create-volume --size 30 --availability-zone $AZONE --volume-type gp2 | awk '{print $7}')
+VOLID=$(aws ec2 create-volume --size 4 --availability-zone $AZONE --volume-type gp2 | awk '{print $7}')
 sleep 5 
 aws ec2 attach-volume --volume-id $VOLID --instance-id $INSTID --device /dev/sdf
 
