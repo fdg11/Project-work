@@ -32,7 +32,7 @@ aws ec2 authorize-security-group-ingress --group-id $SGID --protocol icmp --port
 # Create and running instance
 aws ec2 run-instances --image-id $AMIID --count 1 --instance-type t2.micro \
 	--key-name $KEYNAME --security-group-ids $SGID --subnet-id $SUBNETID \
-	--user-data file://preinstall_nginx_php.sh --output table
+	--user-data file:///admin/aws/preinstall_nginx_php.sh --output table
 
 # instanceID
 while true; do  
