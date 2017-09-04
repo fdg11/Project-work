@@ -14,8 +14,9 @@ else
 fi
 
 # VALUES
+AVZ="eu-central-1b"
 VPCID=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true | head -1 | awk '{print $7}')
-SUBNETID=$(aws ec2 describe-subnets | grep eu-central-1b | awk '{print $9}')
+SUBNETID=$(aws ec2 describe-subnets | grep $AVZ | awk '{print $9}')
 export SGNAME="SSHAccess"
 export KEYNAME="fdg"
 AMIID="ami-1e339e71"
