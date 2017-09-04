@@ -28,8 +28,6 @@ done
 
 if [ "$j" = "3" ]; then
 
-	VPCID=(aws ec2 describe-vpcs --filter Name=tag:Name,Values=NAT --query 'Vpcs[*].VpcId')
-	
 	# Deleting a key pair
         aws ec2 delete-key-pair --key-name $KEYNAME
 
