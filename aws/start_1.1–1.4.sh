@@ -6,8 +6,8 @@
 # Configure the firewall, open / close the port on AWS for the instance
 
 # Check for availability VPC default
-aws ec2 describe-vpcs --filters Name=isDefault,Values=true &> /dev/null
-if [ "$?" = 0 ]; then 
+TEST=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true)
+if [ ! -z "$TEST" ]; then 
 	echo -e "VPC by default exists"
 else
 	aws ec2 create-default-vpc
