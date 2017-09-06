@@ -22,7 +22,6 @@ SGID_LOCAL=$(aws ec2 create-security-group --group-name $SGNAME_LOCAL --descript
 aws ec2 authorize-security-group-ingress --group-id $SGID_LOCAL --protocol all --port -1 --cidr 10.0.0.0/16
 
 # Create and running instances
-
 aws ec2 run-instances --image-id $AMIID --count 2 --instance-type t2.micro \
 	--key-name $KEYNAME --security-group-ids $SGID_LOCAL --subnet-id $SUBNETID \
 	 --output table 
