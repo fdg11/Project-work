@@ -37,7 +37,7 @@ if [ "$j" = "3" ]; then
 
 fi
 
-echo -e "\n Undo step 1.1–1.4"
+echo -e "\n Undo step 1.5"
 
 
 
