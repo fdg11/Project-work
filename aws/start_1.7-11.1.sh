@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-#
-
 # Create an instance of a virtual machine
-# Add a hard disk to the instance
-# Add "white IP" to the instance
-# Configure the firewall, open / close the port on AWS for the instance
+
 
 # Check for availability VPC default
 TEST=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true)
@@ -19,7 +15,7 @@ fi
 AVZ="eu-central-1b"
 VPCID=$(aws ec2 describe-vpcs --filters Name=isDefault,Values=true | head -1 | awk '{print $7}')
 SUBNETID=$(aws ec2 describe-subnets | grep $AVZ | awk '{print $9}')
-export SGNAME="SSHAccess"
+export SGNAME="SSHAccess & HTTP"
 export KEYNAME="fdg"
 AMIID="ami-1e339e71"
 
@@ -28,14 +24,16 @@ aws ec2 create-key-pair --key-name $KEYNAME --query 'KeyMaterial' --output text 
 chmod 400 /admin/aws/key/$KEYNAME.pem
 
 # Create a security group in your VPC, and add a rule that allows SSH access from anywhere and ICMP ping
-SGID=$(aws ec2 create-security-group --group-name $SGNAME --description "Security group for SSH access and ICMP ping" --vpc-id $VPCID)
+SGID=$(aws ec2 create-security-group --group-name $SGNAME --description "Security group for SSH,HTTP access and ICMP ping" --vpc-id $VPCID)
 aws ec2 authorize-security-group-ingress --group-id $SGID --protocol tcp --port 22 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id $SGID --protocol tcp --port 80 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $SGID --protocol icmp --port -1 --cidr 0.0.0.0/0
 
 # Create and running instance
 aws ec2 run-instances --image-id $AMIID --count 1 --instance-type t2.micro \
 	--key-name $KEYNAME --security-group-ids $SGID --subnet-id $SUBNETID \
-	 --output table
+	 --user-data file:///admin/aws/preinstall_nginx_php.sh \
+	  --output table
 
 # instanceID
 while true; do  
@@ -53,11 +51,6 @@ EIPASSOCID=$(aws ec2 associate-address --instance-id $INSTID --allocation-id $AL
 
 # Availability Zone
 AZONE=$(aws ec2 describe-instances --instance-ids $INSTID --query 'Reservations[*].Instances[*].[Placement.AvailabilityZone]')
-
-# Create and attach volume an instance
-export VOLID=$(aws ec2 create-volume --size 4 --availability-zone $AZONE --volume-type gp2 | awk '{print $7}')
-sleep 5 
-aws ec2 attach-volume --volume-id $VOLID --instance-id $INSTID --device /dev/sdf &> /dev/null
 
 # Information output
 ELIP=$(aws ec2 describe-addresses --filters Name=association-id,Values=$EIPASSOCID --query 'Addresses[*].[PublicIp]')

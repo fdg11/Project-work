@@ -18,7 +18,7 @@ cat <<EOF > /etc/nginx/conf.d/main.conf
 server {
     listen       80 default;
     root   /www/;
-    index index.php;
+    index index.php index.html;
 
 location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
                access_log        off;
@@ -38,6 +38,9 @@ location ~ \.php$ {
     }
 }
 EOF
+
+curl -sO https://wordpress.org/wordpress-4.8.1.tar.gz
+tar -xvzf wordpress-4.8.1.tar.gz -C /www --strip-components=1
 
 systemctl enable nginx && systemctl restart nginx
 systemctl enable php7.0-fpm && systemctl restart php7.0-fpm
