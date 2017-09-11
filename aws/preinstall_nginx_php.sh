@@ -25,6 +25,10 @@ location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
                expires           max;
 }
 
+location / {
+        try_files \$uri \$uri/ /index.php?\$args;
+    }
+
 location ~ \.php$ {
          try_files \$uri =404;
                fastcgi_pass   unix:/run/php/php7.0-fpm.sock;
