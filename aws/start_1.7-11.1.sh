@@ -41,7 +41,7 @@ aws ec2 authorize-security-group-ingress --group-id $DBSGID --protocol all --por
 # Create and running instance
 aws ec2 run-instances --image-id $AMIID --count 1 --instance-type t2.micro \
 	--key-name $KEYNAME --security-group-ids $SGID --subnet-id $SUBNETID \
-	 --user-data file:///admin/aws/preinstall_nginx_php.sh \
+	 --user-data file:///admin/nginx/preinstall_nginx_php.sh \
 	  --output table
 
 # instanceID
@@ -60,13 +60,14 @@ aws rds create-db-instance --db-instance-identifier $DBIDENT --db-instance-class
 
 while true; do
 	DBSTATUS=$(aws rds describe-db-instances --db-instance-identifier $DBIDENT --query 'DBInstances[*].DBInstanceStatus')
-	if [ "$DBSTATUS" = "available" ]; then 
+	if [ "$DBSTATUS" = "backing-up" ]; then 
 		echo -e "DB-instance ready"
 		break
 	else 
-		echo -e "Wait DB-instance is a ready"
-		sleep 5
+		echo -e "Wait DB-instance is not ready"
+		sleep 25
 	fi
+done
 
 ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier $DBIDENT --query 'DBInstances[*].Endpoint.[Address]')
 
@@ -84,7 +85,7 @@ ELIP=$(aws ec2 describe-addresses --filters Name=association-id,Values=$EIPASSOC
 
 echo -e "\nTo connect, use the following command: ssh -i /admin/aws/key/$KEYNAME.pem ubuntu@$ELIP\n"
 echo -e "Web Ip: $ELIP"
-echo -e "Access DB:"
+echo -e "Access DB ####################"
 echo -e "DB-user: $DBUSER"
 echo -e "DB-name: $DBNAME"
 echo -e "DB-password: $DBPASSWD"
