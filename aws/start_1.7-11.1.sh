@@ -58,6 +58,7 @@ aws rds create-db-instance --db-instance-identifier $DBIDENT --db-instance-class
      --backup-retention-period 3 --db-name $DBNAME --vpc-security-group-ids $DBSGID \
       --output table 
 
+# Status DB-instance
 while true; do
 	DBSTATUS=$(aws rds describe-db-instances --db-instance-identifier $DBIDENT --query 'DBInstances[*].DBInstanceStatus')
 	if [ "$DBSTATUS" = "backing-up" ]; then 
@@ -69,6 +70,7 @@ while true; do
 	fi
 done
 
+# Endpoint db-instance
 ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier $DBIDENT --query 'DBInstances[*].Endpoint.[Address]')
 
 # Allocates an Elastic IP address
